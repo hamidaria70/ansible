@@ -1,0 +1,6 @@
+---
+  - name: Create User
+    hosts: servers
+    become: true
+    roles:
+      - adduser
