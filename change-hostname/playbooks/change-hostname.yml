@@ -1,0 +1,9 @@
+---
+  - name: Set Hostnames
+    hosts: servers
+    gather_facts: yes
+    become: true
+    tasks:
+      - name: Changing Hostnames
+        hostname:
+          name: "{{ inventory_hostname }}"
