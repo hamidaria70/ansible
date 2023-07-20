@@ -1,0 +1,8 @@
+- name: Copy kubeconfig
+  copy:
+    src: configs/kube-config.yml
+    dest: $HOME/.kube/config
+- name: Delete Extra files
+  file:
+    path: configs
+    state: absent

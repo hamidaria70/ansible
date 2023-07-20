@@ -1,0 +1,17 @@
+[master]
+172.16.1.11
+172.16.1.12
+172.16.1.13
+
+[master:vars]
+ansible_user=root
+
+[worker]
+172.16.1.21
+172.16.1.22
+172.16.1.23
+172.16.1.24
+
+[worker:vars]
+ansible_user=root
+

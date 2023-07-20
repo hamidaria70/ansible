@@ -1,0 +1,30 @@
+---
+  - name: RKE2 First Master
+    hosts: master[0]
+    become: true
+    roles:
+      - downloads
+      - server
+      - access
+  
+  - name: RKE2 Other Master
+    hosts: master[1:]
+    become: true
+    roles:
+      - downloads
+      - grant
+      - server
+  
+  - name: RKE2 Worker
+    hosts: worker
+    become: true
+    roles:
+      - downloads
+      - config
+      - agent
+  
+  - name: Host Clean Up
+    hosts: 127.0.0.1
+    connection: local
+    roles:
+      - cleanup

@@ -1,0 +1,53 @@
+- name: Get Master ip
+  debug:
+    var: hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+
+- name: Get Token
+  command: cat "/var/lib/rancher/rke2/server/node-token"
+  register: token
+
+- name: Create worker config file
+  copy:
+    dest: /tmp/config.yml
+    content: |
+      server: https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:9345
+      token: {{ token.stdout }}
+
+- name: Create a copy of rke2.yml
+  shell: cp /etc/rancher/rke2/rke2.yaml /tmp/rke2.yaml
+
+- name: Replcing IP - From 127.0.0.1 to master node IP
+  replace:
+    path: /tmp/rke2.yaml
+    regexp: 127.0.0.1
+    replace: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+- name: Create Master config file
+  copy:
+    dest: /tmp/server-config.yml
+    content: |
+      server: https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:9345
+      token: {{ token.stdout }}
+      tls-san:
+        - {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+
+- name: Fetch rke2.yml from first master node to ansible server
+  run_once: yes
+  fetch:
+    src: /tmp/rke2.yaml
+    dest: configs/kube-config.yml
+    flat: yes
+
+- name: Fetch agent config from first master node to ansible server
+  run_once: yes
+  fetch:
+    src: /tmp/config.yml
+    dest: configs/config.yml
+    flat: yes
+
+- name: Fetch server config from first master node to ansible server
+  run_once: yes
+  fetch:
+    src: /tmp/server-config.yml
+    dest: configs/server-config.yml
+    flat: yes

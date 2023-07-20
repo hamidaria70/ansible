@@ -1,0 +1,8 @@
+- name: Installing RKE2
+  command: sh /tmp/rke2.sh
+
+- name: Start & Enable RKE2 Agent
+  service:
+    name: rke2-agent
+    state: started
+    enabled: yes

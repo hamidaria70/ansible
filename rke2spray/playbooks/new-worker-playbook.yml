@@ -1,0 +1,14 @@
+---
+  - name: Making config files from a Master
+    hosts: master
+    become: true
+    roles:
+      - access
+
+  - name: RKE2 Worker
+    hosts: worker
+    become: true
+    roles:
+      - downloads
+      - config
+      - agent
