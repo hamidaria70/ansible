@@ -1,0 +1,10 @@
+- name: Creating User
+  user:
+    name: monitoring
+    password: '$6$vvuba9AJS1Pv3fGw$cwZlqczc/2G0AJy5yo/gzCi9.PsY6sr3fKGigG29xYDPtJUNOycUwikq/VTi9ls4pWdNwVsIp0l5/DgNs7Aw5/'
+    state: present
+    shell: /bin/bash
+    system: no
+    createhome: yes
+    home: /home/monitoring
+
